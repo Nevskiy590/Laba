@@ -1,42 +1,38 @@
 pipeline {
     agent any
-    
+
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Generate Solution') {
             steps {
-                bat '''
-                    mkdir build || true
-                    cd build
-                    "C:\\Program Files\\CMake\\bin\\cmake.exe" .. -G "Visual Studio 17 2022" -A x64
-                '''
+                bat 'mkdir build || true'
+                dir('build') {
+                    bat '"C:\\Program Files\\CMake\\bin\\cmake.exe" .. -G "Visual Studio 17 2022" -A x64'
+                }
             }
         }
-        
+
         stage('Build') {
             steps {
-                bat '''
-                    cd build
-                    cmake --build . --config Release
-                '''
+                dir('build') {
+                    bat '"C:\\Program Files\\CMake\\bin\\cmake.exe" --build . --config Release'
+                }
             }
         }
-        
+
         stage('Test') {
             steps {
-                bat '''
-                    cd build\\Release
-                    if exist main.exe (
-                        main.exe
-                    ) else (
-                        echo "Executable not found!"
-                        dir /B
-                        exit 1
-                    )
-                '''
+                // Здесь могут быть ваши тесты, например:
+                bat '"C:\\Program Files\\CMake\\bin\\ctest.exe" --output-on-failure -C Release'
             }
         }
     }
-    
+
     post {
         always {
             cleanWs()

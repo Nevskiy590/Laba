@@ -1,14 +1,29 @@
-name: Windows Native Build
+name: Windows MSVC Build
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest  # Windows Server 2022
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Build with MSBuild
+    - name: Setup MSVC (Visual Studio 2022)
+      uses: ilammy/msvc-dev-cmd@v1  # Активация инструментов MSVC
+
+    - name: Generate Solution
       run: |
-        msbuild YourSolution.sln /p:Configuration=Release /p:Platform=x64
+        mkdir build
+        cd build
+        cmake .. -G "Visual Studio 17 2022" -A x64
+
+    - name: Build Release
+      run: |
+        cd build
+        cmake --build . --config Release
+
+    - name: Run Tests (если есть)
+      run: |
+        cd build/Release
+        .\YourProjectTests.exe

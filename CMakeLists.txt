@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(OPN_PROJECT)
 
 # Укажите правильный путь к исходникам
-add_executable(main 
+add_executable(OPN_PROJECT 
     src/main.cpp  # Или другой путь к вашему основному файлу
 )
 

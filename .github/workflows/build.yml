@@ -1,18 +1,26 @@
-name: Windows MSVC Build
+name: C++ Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
-      
-    - name: Build with MSVC
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ cmake
+        
+    - name: Build
       run: |
         mkdir build
         cd build
         cmake ..
-        cmake --build . --config Release
-
+        make

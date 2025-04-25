@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    
     stages {
         stage('Generate Solution') {
             steps {
@@ -10,6 +11,7 @@ pipeline {
                 '''
             }
         }
+        
         stage('Build') {
             steps {
                 bat '''
@@ -18,6 +20,7 @@ pipeline {
                 '''
             }
         }
+        
         stage('Test') {
             steps {
                 bat '''
@@ -25,7 +28,7 @@ pipeline {
                     if exist main.exe (
                         main.exe
                     ) else (
-                        echo "Executable not found:"
+                        echo "Executable not found!"
                         dir /B
                         exit 1
                     )
@@ -33,5 +36,10 @@ pipeline {
             }
         }
     }
-}
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
 }

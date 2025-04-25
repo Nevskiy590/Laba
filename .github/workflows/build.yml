@@ -4,26 +4,21 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: windows-latest  # Windows Server 2022
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Setup MSVC (Visual Studio 2022)
-      uses: ilammy/msvc-dev-cmd@v1  # Активация инструментов MSVC
+      uses: ilammy/msvc-dev-cmd@v1 
 
     - name: Generate Solution
       run: |
         mkdir build
         cd build
-        cmake .. -G "Visual Studio 17 2022" -A x64
+        cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
 
     - name: Build Release
       run: |
         cd build
-        cmake --build . --config Release
-
-    - name: Run Tests (если есть)
-      run: |
-        cd build/Release
-        .\YourProjectTests.exe
+        cmake --build . --config Release --target ALL_BUILD

@@ -6,7 +6,7 @@ pipeline {
                 bat '''
                     mkdir build || true
                     cd build
-                    cmake .. -G "Visual Studio 17 2022" -A x64
+                    "C:\\Program Files\\CMake\\bin\\cmake.exe" .. -G "Visual Studio 17 2022" -A x64
                 '''
             }
         }
@@ -33,4 +33,5 @@ pipeline {
             }
         }
     }
+}
 }

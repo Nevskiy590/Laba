@@ -1,23 +1,41 @@
-name: Deploy to GitHub Pages
+name: Generate Documentation
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+  generate-docs:
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Build (ваш шаг сборки)
-        run: echo "Здесь ваша сборка" > index.html
+    - name: Install Doxygen
+      run: |
+        choco install doxygen.install --version=1.9.1 -y --no-progress
+        if (!(Test-Path "C:\Program Files\doxygen\bin\doxygen.exe")) {
+          Write-Error "Doxygen installation failed!"
+          exit 1
+        }
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.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 }}
-          publish_dir: ./Laba 
+    - name: Generate Documentation
+      run: |
+        $doxygenPath = "C:\Program Files\doxygen\bin\doxygen.exe"
+        & "$doxygenPath" Doxyfile
+
+    - name: Verify Documentation
+      run: |
+        if (!(Test-Path "docs\html")) {
+          Write-Error "Documentation was not generated!"
+          exit 1
+        }
+        dir docs\html
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: docs/html

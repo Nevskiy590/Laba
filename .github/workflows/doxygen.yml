@@ -21,8 +21,3 @@ jobs:
         with:
           github_token: ${{ secrets.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 }}
           publish_dir: ./Laba 
-
-      - name: Debug
-	  run: |
-	  echo "Токен: ${{ secrets.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 }}"
-	  git remote -v

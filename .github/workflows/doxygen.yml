@@ -1,23 +1,28 @@
-name: Generate Doxygen Documentation
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen graphviz
+      - name: Build (ваш шаг сборки)
+        run: echo "Здесь ваша сборка" > index.html
 
-      - name: Generate Doxygen
-        run: doxygen Doxyfile
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/html
+          github_token: ${{ secrets.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 }}
+          publish_dir: ./Laba 
+
+      - name: Debug
+	  run: |
+	  echo "Токен: ${{ secrets.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 }}"
+	  git remote -v

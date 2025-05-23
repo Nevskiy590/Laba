@@ -6,6 +6,7 @@ add_executable(OPN_PROJECT
     src/main.cpp  # Или другой путь к вашему основному файлу
 )
 
+
 # Для Visual Studio явно укажите стандарт C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
